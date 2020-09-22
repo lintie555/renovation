@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="./css/reset.css" />
+		<script src="./js/vue.min.js"></script>
+		<style>
+			body {
+				background-image: linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd),
+					linear-gradient(45deg, #ddd 26%, transparent 26%, transparent 74%, #ddd 74%, #ddd);
+				background-image: -webkit-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd),
+					-webkit-linear-gradient(45deg, #ddd 26%, transparent 26%, transparent 74%, #ddd 74%, #ddd);
+				background-image: -moz-linear-gradient(45deg, #ddd 24%, transparent 24%, transparent 76%, #ddd 76%, #ddd),
+					-moz-linear-gradient(45deg, #ddd 26%, transparent 26%, transparent 74%, #ddd 74%, #ddd);
+				background-image: -o-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd),
+					-o-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd);
+				background-size: 20px 20px;
+				background-position: 0 0, 10px 10px;
+			}
+
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			.w1200{
+				width:1200px;
+				margin:0 auto;
+			}
+			.topEdit{
+				position:fixed;
+				top:0;
+				left:0;
+				width:100%;
+				height:80px;
+				background:#fff;
+				box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+				z-index:100;
+				padding-top:20px;
+			}
+			.topEditBox{
+				position:absolute;
+				top:0;
+				left:0;
+			}
+			.topEditBox p{
+				min-width: 18px;
+				padding:0 10px;
+				height: 20px;
+				line-height:20px;
+				margin: 50px 0 0 10px;
+				background: #999;
+				cursor:pointer;
+				color:#fff;
+				border-radius:2px;
+				font-size:12px;
+			}
+			.topEdit .box{
+				width:168px;
+				height:40px;
+				line-height:40px;
+				background:#eee;
+				border:1px solid #BDBDBD;
+				padding:4px;
+				font-size:14px;
+			}
+			.topEdit .y1{
+				width:50%;
+				height:32px;
+				line-height:32px;
+				text-align:center;
+				color:#fff;
+				background:#bbb;
+				cursor:pointer;
+			}
+			.topEdit .t1{
+				width:60px;
+				height:40px;
+				line-height:40px;
+				text-align:center;
+				color:#fff;
+				background:#50c7ff;
+				font-size:14px;
+				margin-left:4px;
+				cursor:pointer;
+			}
+			.topEdit .y2,
+			.topEdit .t2{
+				background:palevioletred;
+			}
+			.rightMume {
+				position: fixed;
+				right: 0;
+				top: 80px;
+				width:400px;
+				height: calc(100vh - 80px);
+				background: #fff;
+				box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+				overflow-y:auto;
+				overflow-x:hidden;
+				padding:30px;
+				z-index:99;
+			}
+
+			.leftMume {
+				position: fixed;
+				left: 0;
+				top:80px;
+				width:160px;
+				height: calc(100vh - 80px);
+				background: #fff;
+				box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+				padding:20px 0 0 20px;
+				overflow-y:auto;
+				overflow-x:hidden;
+				z-index:99;
+			}
+
+			.leftMume .y1 {
+				float: left;
+				position: relative;
+				width: 100px;
+				height: 100px;
+				background: #eee;
+				border-radius: 20px;
+				margin:0 20px 20px 0;
+				color: #fff;
+				font-size: 14px;
+				cursor: pointer;
+				overflow: hidden;
+			}
+
+			.leftMume .y1 p {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				background: rgba(0, 0, 0, 0.6);
+				z-index:2;
+			}
+			.leftMume .y1 i{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height:100%;
+				z-index:1;
+			}
+
+			.leftMume .y1 img {
+				/* max-width: 100px;
+				max-height: 100px; */
+				width:100%;
+				height:100%;
+			}
+
+			.leftMume .y1:hover {
+				opacity: 0.8;
+			}
+
+			.common {
+				min-height:100vh;
+				margin:0 auto 0;
+				max-width:1500px;
+				min-width:1200px;
+				background: #f5f5f5;
+				padding-top:80px;
+				box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+			}
+
+			.common ul li {
+				list-style: none;
+				font-size: 14px;
+				padding-bottom:10px;
+			}
+			.common ul li .w1200{
+				position: relative;
+			}
+
+			.common ul li .bjFloor,
+			.common ul li .delFloor {
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: 80px;
+				height: 30px;
+				color: #fff;
+				text-align: center;
+				line-height: 30px;
+				background: rgba(0, 0, 0, 0.6);
+				cursor: pointer;
+				z-index: 9;
+			}
+
+			.common ul li .bjFloor {
+				top: 0;
+				right: 81px;
+			}
+
+			.common ul li .bjFloor:hover,
+			.common ul li .delFloor:hover {
+				opacity: 0.8;
+			}
+
+			.common ul li .floorTxt {
+				position: absolute;
+				right: 162px;
+				top: 0;
+				color: #fff;
+				line-height: 30px;
+				background: rgba(0, 0, 0, 0.6);
+				height: 30px;
+				padding: 0 24px;
+				z-index: 9;
+			}
+
+			.common ul li .liBox {
+				/* position: relative; */
+				min-height: 80px;
+				/* background: #fff; */
+			}
+
+			.common ul li .liBox2 {
+				display: none;
+				width:98%;
+				height: 60px;
+				line-height: 60px;
+				text-align: center;
+				border: 2px dashed palevioletred;
+				color: palevioletred;
+				border-radius:4px;
+				margin:8px auto 0;
+			}
+			.common ul li .liBoxJian{
+				background:palevioletred;
+				width:1060px;
+				height:60px;
+				line-height:60px;
+				text-align:center;
+				border-radius:4px;
+				color:#fff;
+				margin:0 auto;
+			}
+			
+			.common ul li .goodsList{
+				padding:10px;
+			}
+			.common ul li .goodsList .hdl{
+				width:345px;
+				height:400px;
+				/* background:#666; */
+				margin:10px;
+				font-size:14px;
+			}
+			.common ul li .goodsList .hdl img{
+				width:345px;
+				height:345px;
+			}
+			.common ul li .goodsList .hdl p{
+				font-size:20px;
+				color: #D32E43;
+			}
+
+			.common ul .floorSele .liBox2 {
+				display: block;
+			}
+
+			.wh100v {
+				width: 100%;
+			}
+			.rightBox{
+				padding:20px;
+			}
+			.rightBox dt{
+				font-size:20px;
+				color:#666;
+				font-weight:bold;
+				margin-bottom:12px;
+			}
+			.rightBox dd{
+				margin-bottom:20px;
+			}
+			.rightBox dd p{
+				font-size:14px;
+				color:#999;
+				margin-bottom:8px;
+			}
+			.rightBox dd input{
+				width:100%;
+				height:34px;
+				line-height:34px;
+				padding-left:8px;
+				background:#eee;
+			}
+			.rightBox dd .y1{
+				float: left;
+				position: relative;
+				width: 100px;
+				height: 100px;
+				background: #eee;
+				border-radius: 20px;
+				margin:6px;
+				color: #fff;
+				font-size: 14px;
+				cursor: pointer;
+				overflow: hidden;
+			}
+			
+			.rightBox dd .y1 .h1{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				background: rgba(0, 0, 0, 0.6);
+				z-index:2;
+				padding:0 8px;
+			}
+			.rightBox dd .y1 img{
+				width:100%;
+				height:100%;
+			}
+			.rightBox dd .y1 i{
+				display:block;
+				position: absolute;
+				top:8px;
+				right:8px;
+				width:12px;
+				height:12px;
+				border-radius:50%;
+				background:#fff;
+			}
+			.rightBox dd .sele i{
+				background:palevioletred;
+			}
+			
+			.rightBox .quxiao,
+			.rightBox .baocun{
+				width:100%;
+				height:34px;
+				line-height:34px;
+				text-align:center;
+				color:#fff;
+				background:palevioletred;
+				border-radius:4px;
+				cursor:pointer;
+				margin-bottom:10px;
+			}
+			.rightBox .quxiao{
+				background:#ddd;
+			}
+			.rightBox .quxiao:hover,
+			.rightBox .baocun:hover{
+				opacity:0.8;
+			}
+			.editBoxBg{
+				position:fixed;
+				left:0;
+				top:0;
+				width:100%;
+				height:100%;
+				background:rgba(0,0,0,0.6);
+				z-index:998;
+			}
+			.editBox{
+				position:fixed;
+				left:50%;
+				top:20%;
+				width:900px;
+				min-height:600px;
+				margin:0 0 0 -450px;
+				z-index:999;
+				background:#fff;
+				font-size:14px;
+				padding-bottom:80px;
+			}
+			.editBox .hTitle{
+				height:30px;
+				background:#333;
+				padding:0 20px;
+				color:#fff;
+			}
+			.editBox .hButtom{
+				position:absolute;
+				left:0;
+				bottom:0;
+				width:100%;
+				height:80px;
+			}
+			.editBox .hButtom .hBtn{
+				width:80px;
+				height:40px;
+				color:#fff;
+				background:#bbb;
+				text-align:center;
+				line-height:40px;
+				cursor:pointer;
+				border-radius:8px;
+				margin:0 10px;
+			}
+			.editBox .hButtom .hBtn2{
+				background:#00aeff;
+			}
+			.editBox .hButtom .hBtn:hover{
+				opacity:0.8;
+			}
+			.editBox .hCom{
+				padding:20px 40px;
+			}
+			.editBox .hCom .y1{
+				padding-left:8px;
+				border-left:4px solid #666;
+				height:24px;
+				line-height:24px;
+				font-size:16px;
+				margin-bottom:14px;
+			}
+			.editBox .hCom .hBox{
+				border:1px solid #ddd;
+				padding:20px;
+			}
+			.editBox .hCom .hBox .y2{
+				padding-left:80px;
+			}
+			.editBox .hCom .hBox ul li{
+				margin-bottom:20px;
+			}
+			.editBox .hCom .hBox ul li p{
+				width:80px;
+				text-align:right;
+			}
+			.editBox .hCom .hBox ul li input{
+				/* border:1px solid #ddd; */
+				width:500px;
+				height:30px;
+				background:#eee;
+				padding-left:10px;
+			}
+			
+			
+			
+			
+			
+			.hSearchBox{
+				/* background:#666; */
+				font-size:18px;
+				color:#999;
+				padding:10px
+			}
+			.hSearchBox .y1{
+				padding-left:10px;
+			}
+			
+			.hSearchBox .hInput{
+				width:400px;
+				background:#fff;
+				height:40px;
+				line-height:40px;
+				border:1px solid #eee;
+				margin:0 10px;
+				border-radius:6px;
+				overflow:hidden;
+			}
+			.hSearchBox .hInput input{
+				width:100%;
+				background:transparent;
+				height:38px;
+				padding-left:14px;
+			}
+			.hSearchBox .w100{
+				width:100px;
+			}
+			.hSearchBox .hBtn{
+				background:#BBBBBB;
+				color:#fff;
+				height:40px;
+				width:80px;
+				text-align:center;
+				line-height:40px;
+				margin-left:10px;
+				border-radius:6px;
+				cursor:pointer;
+			}
+			.hSearchBox .hBtn:hover{
+				background:#8B8B8B;
+			}
+			.hSearchBox p{
+				width:148px;
+				color:#666;
+			}
+			.hSearchBox .hotword{
+				margin-top:14px;
+				color:#666;
+				font-size:14px;
+			}
+			.hSearchBox .hotword dt{
+				color:#999;
+				margin-right:10px;
+			}
+			.hSearchBox .hotword dd{
+				margin-right:10px;
+				cursor:pointer;
+			}
+			.hSearchBox .hotword dd:hover{
+				color:#000;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+			<div class="topEdit">
+				<div class="topEditBox">
+					<p class="fl" @click="leftMume = !leftMume">元素组件</p>
+					<p class="fl" @click="rightMume = !rightMume">控制台</p>
+				</div>
+				<div class="w1200 fsb">
+					<div class="fst box">
+						<div class="y1" :class="{'y2': !liBoxJian}" @click="liBoxJian = false">页面编辑</div>
+						<div class="y1" :class="{'y2': liBoxJian}" @click="liBoxJian = true">布局管理</div>
+					</div>
+					<div class="fst">
+						<div class="t1">保存</div>
+						<div class="t1">浏览</div>
+						<div class="t1 t2">发布</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 左边的模块栏 -->
+			<div class="leftMume clearfix" v-show="leftMume">
+				<div class="y1 fcc" draggable='true' @dragstart='drag(index,item,0)' :index="index" v-for="(item,index) in items2">
+					<img :src="item.pic" alt="">
+					<p>{{item.txt}}</p>
+					<i></i>
+				</div>
+			</div>
+			<!-- 左边的模块栏end -->
+			
+			<div class="editBoxBg" v-show="rightBox && rightBox.txt">
+			<div class="editBox">
+				<div class="hTitle fsb">
+					<p>本店铺搜索 {{rightBox.txt}}</p>
+					<svg @click="clearRightBox" style="cursor:pointer;" t="1566531257372" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10888" width="14" height="14"><path d="M927.435322 1006.57265l-415.903813-415.903814L95.627695 1006.57265a56.013982 56.013982 0 1 1-79.20377-79.231777l415.903814-415.875807L16.423925 95.58926A56.013982 56.013982 0 0 1 95.627695 16.357483l415.903814 415.903813L927.435322 16.357483a55.985975 55.985975 0 1 1 79.175763 79.231777L590.763286 511.465066l415.847799 415.875807a55.985975 55.985975 0 1 1-79.175763 79.231777z" p-id="10889" fill="#ffffff"></path></svg>
+				</div>
+				<div class="hCom">
+					<div class="y1">显示设置</div>
+					<div class="hBox">
+						<ul v-if="rightBox.pic">
+							<li class="fst">
+								<p>图片链接：</p> <input type="text" v-model="rightBox.pic">
+							</li>
+						</ul>
+						<ul v-if="rightBox.txt=='搜索栏'">
+							<li class="fst" v-for="(item,index) in rightBox.hotkeywordlist">
+								<p>关键词{{index+1}}：</p> <input type="text" v-model="item.keyword">
+							</li>	
+						</ul>
+						<ul v-if="rightBox.txt=='视频栏'">
+							<li class="fst">
+								<p>视频链接：</p> <input type="text" v-model="rightBox.video">
+							</li>
+						</ul>
+						<div class="y2">
+							<svg t="1566527201270" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6641" width="14" height="14"><path d="M512 92.56959999999992c-226.35926383881477 0-410.5535657908148 184.19430316562963-410.5535657908148 410.5535657908148 0 77.6722962962963 22.19208430933333 155.3445925925926 64.35704498251852 221.92084673422224 6.657625050074073 11.096042154666666 19.97287636385185 13.315251313777777 31.06891851851852 6.657625050074073 11.096042154666666-6.657625050074073 13.315251313777777-19.97287636385185 6.657625050074073-31.06891851851852-37.72654356859259-57.69941993244444-57.69941993244444-126.49488201955555-57.69941993244444-197.50955326577775 0-201.94797037037037 164.2214268017778-366.16939717214814 366.16939717214814-366.1693959585185s366.16939717214814 164.2214268017778 366.16939717214814 366.1693959585185S713.9479703703704 869.292562962963 512 869.292562962963c-95.42596350103702 0-184.19430316562963-35.50733562311111-252.9897652527407-102.08358976474075-8.876834209185184-8.876834209185184-22.19208430933333-8.876834209185184-31.06891851851852 0-8.876834209185184 8.876834209185184-8.876834209185184 22.19208430933333 0 31.06891851851852 77.6722962962963 73.2338791917037 177.53667690192594 115.39883986488888 284.0586837712592 115.3988410785185 226.35926383881477 0 410.5535657908148-184.19430316562963 410.5535657908148-410.5535670044444S738.3592638388147 92.56959999999992 512 92.56959999999992z" fill="#1296db" p-id="6642"></path><path d="M489.8079156906667 696.1943031656298c0 13.315251313777777 8.876834209185184 22.19208430933333 22.19208430933333 22.19208430933333s22.19208430933333-8.876834209185184 22.19208430933333-22.19208430933333V401.0395772397037c0-13.315251313777777-8.876834209185184-22.19208430933333-22.19208430933333-22.19208552296296s-22.19208430933333 8.876834209185184-22.19208430933333 22.19208552296296v295.1547259259259zM512 347.77857319822226c13.315251313777777 0 22.19208430933333-8.876834209185184 22.19208430933333-22.19208430933333v-15.53445925925926c0-13.315251313777777-8.876834209185184-22.19208430933333-22.19208430933333-22.19208430933333s-22.19208430933333 8.876834209185184-22.19208430933333 22.19208430933333v15.53445925925926c0 13.315251313777777 11.096042154666666 22.19208430933333 22.19208430933333 22.19208430933333z" fill="#1296db" p-id="6643"></path></svg>
+							1个关键词最多30个字符
+						</div>
+					</div>
+				</div>
+				
+				<div class="hButtom fcc">
+					<div class="hBtn hBtn2"  @click="saveRightBox">保存</div>
+					<div class="hBtn" @click="clearRightBox">取消</div>
+				</div>
+				
+			</div>
+			</div>
+
+			<!-- 右边的属性栏 -->
+			<div class="rightMume" v-show="rightMume">
+				<div style="margin-bottom:30px;">
+					简易监控台(麻瓜版):
+					<br />
+					{{items}}
+				</div>
+				<div>
+					当前编辑区域(麻瓜版):
+					<br />
+					{{rightBox}}
+				</div>
+
+				<!-- <div class="rightBox" v-show="rightBox && rightBox.txt">
+					<dl>
+						<dt>{{rightBox.txt}}</dt>
+						<dd>
+							<p>图片地址:</p><input type="text" v-model="rightBox.pic">
+						</dd>
+						<dd>
+							<p>属性1:</p><input type="text" :value="rightBox.pic">
+						</dd>
+						<dd>
+							<p>属性2:</p><input type="text" :value="rightBox.pic">
+						</dd>
+						<dd>
+							<p>属性3:</p><input type="text" :value="rightBox.pic">
+						</dd>
+						<dd>
+							<div class="clearfix">
+								<div class="y1" :class="seleddy1==index?'sele':''" @click="seleddy1Btn(index)" title="这里是商品名称啊什么的" v-for="(item,index) in 10">
+									<img src="https://hbimg.huabanimg.com/74b6dd03b7c797a6ed805cd471626becea1234c44cd06-CoxwvD_fw658" alt="">
+									<div class="h1 ellipsis_1">这里是商品名称啊什么的</div>
+									<i></i>
+								</div>
+							</div>
+						</dd>
+					</dl>
+					<div class="baocun" @click="saveRightBox">保存</div>
+					<div class="quxiao" @click="clearRightBox">取消</div>
+				</div> -->
+			</div>
+			<!-- 右边的属性栏end -->
+
+			<!-- 中间的内容编辑区域 -->
+			<div class="common" v-show="!liBoxJian">
+				<ul ref='parant'>
+					<li v-for="(item, index) in items" :class="floorSele==index?'floorSele':''" draggable='true' @dragstart='drag(index,item,1)'
+					 @dragover='allowDrop($event,index)' @drop="drop(index)">
+						
+						<!-- 模块类型名称与操作按钮 -->
+						<div class="w1200">
+							<div class="floorTxt">{{item.txt}}</div>
+							<div class="bjFloor" @click="rightBoxBtn(index)">编辑</div>
+							<div class="delFloor" @click="delFloor(index)">删除</div>
+						</div>
+						<!-- 模块类型名称与操作按钮end -->
+						
+						<div class="liBox">
+
+							<div class="hSearchBox w1200" v-if="item.txt=='搜索栏'">
+								<div class="fcc">
+									<p>This shop search</p>
+									<div class="hInput fsb">
+										<input class="" type="text">
+									</div>
+									
+									<div class="hInput fsb w100">
+										<div class="y1">$</div>
+										<input class="" type="text">
+									</div>
+									-
+									
+									<div class="hInput fsb w100">
+										<div class="y1">$</div>
+										<input class="" type="text">
+									</div>
+									
+									<div class="hBtn">
+										<svg style="margin-top:7px;" t="1566453746398" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5611" width="24" height="24"><path d="M1010.4859 956.461041l-170.104377-183.238287a468.654917 468.654917 0 1 0-170.104377 131.91768 37.608111 37.608111 0 0 0 20.192662-22.044138 40.15389 40.15389 0 0 0-1.157172-29.565761 37.550252 37.550252 0 0 0-21.928422-20.30838 37.087383 37.087383 0 0 0-29.450043 1.157173 394.885161 394.885161 0 1 1 120.693105-85.804351 41.311063 41.311063 0 0 0-10.935281 27.830002 39.864597 39.864597 0 0 0 12.092454 27.830002c0.578586 0.578586 1.735759 1.157173 2.314345 1.735759s0.578586 0.578586 1.157173 0.578586 0.578586 0.578586 0.578586 1.157173a12.092454 12.092454 0 0 0 2.314345 3.471517l186.594088 200.653735a38.996718 38.996718 0 0 0 54.849983 1.735759 40.501042 40.501042 0 0 0 12.728898-27.251415 38.47599 38.47599 0 0 0-9.835967-29.855054z" fill="#ffffff" p-id="5612"></path></svg>
+									</div>
+								</div>
+								<div class="hotword">
+									<dl class="fcc">
+										<dt>Hot keywords:</dt>
+										<dd v-for="(com,comindex) in item.hotkeywordlist">{{com.keyword}}</dd>
+									</dl>
+								</div>
+							</div>
+							
+							<div class="hVideoBox w1200" v-if="item.txt=='视频栏'">
+								<div>
+									<video style="width:100%;" :src="item.video" controls="controls" oncontextmenu="return false;"></video>
+								</div>
+							</div>
+
+							<div class="banner1" v-if="item.txt=='默认banner'">
+								<img class="wh100v" :src="item.pic" alt="">
+							</div>
+							
+							<div class="banner2 wh100v" v-if="item.txt=='banner'">
+								<img class="wh100v" :src="item.pic" alt="">
+							</div>
+							
+							<div class="w1200" v-if="item.txt=='商品列表'">
+								<img class="wh100v" :src="item.pic" alt="">
+							</div>
+							
+							<div class="w1200" v-if="item.txt=='商品列表1'">
+								<div class="goodsList clearfix">
+									<div class="hdl fl" v-for="(com,index) in item.goods">
+										<img :src="com.pic" alt="">
+										<div>{{com.title}}</div>
+										<p>{{com.pirce}}</p>
+									</div>
+								</div>
+							</div>
+							
+							<div class="w1200" v-if="item.txt=='floor'"><img class="wh100v" :src="item.pic" alt=""></div>
+
+						</div>
+						
+						<!-- 拖拽虚线框 -->
+						<div class="liBox2">麻瓜，拖拽到此处添加模块</div>
+						<!-- 拖拽虚线框end -->
+						
+					</li>
+				</ul>
+			</div>
+			<!-- 中间的内容编辑区域end -->
+
+			<!-- 中间的布局管理区域 -->
+			<div class="common" v-show="liBoxJian">
+				
+				<div style="height:30px;"></div>
+				
+				<ul ref='parant'>
+					<li v-for="(item, index) in items" :class="floorSele==index?'floorSele':''" draggable='true' @dragstart='drag(index,item,1)'
+					 @dragover='allowDrop($event,index)' @drop="drop(index)">
+						
+						<!-- 模块类型名称与操作按钮 -->
+						<div class="w1200">
+							<div class="bjFloor" @click="rightBoxBtn(index)">编辑</div>
+							<div class="delFloor" @click="delFloor(index)">删除</div>
+						</div>
+						<!-- 模块类型名称与操作按钮end -->
+						
+						<div class="liBoxJian">
+							{{item.txt}}
+						</div>
+						
+						<!-- 拖拽虚线框 -->
+						<div class="liBox2" style="width:1080px;">麻瓜，拖拽到此处添加模块</div>
+						<!-- 拖拽虚线框end -->
+						
+					</li>
+				</ul>
+			</div>
+			<!-- 中间的内容编辑区域end -->
+
+		</div>
+
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					leftMume:true,
+					rightMume:false,
+					liBoxJian:false,
+					items2: [{
+							txt: 'banner',
+							pic: 'https://hbimg.huabanimg.com/29f86fdc5cf6f482986c6ead58c752511866ea6d80245-a3Ys1W_fw658'
+						},
+						{
+							txt: '搜索栏',
+							hotkeywordlist:[
+								{keyword:'蔡徐坤'},
+								{keyword:'没有一个能打的'},
+								{keyword:'啊屁股'},
+								{keyword:'junemetioney'},
+								{keyword:'冲冲冲'},
+								{keyword:'不雅照'},
+								{keyword:'打篮球'},
+								{keyword:'哪吒'},
+							]
+						},
+						{
+							txt: 'floor',
+							pic: 'https://hbimg.huabanimg.com/5899d3385d455e4658180bf2332791d026317e855a43-e1VJtD_fw658'
+						},
+						{
+							txt: 'floor',
+							pic: 'https://hbimg.huabanimg.com/024de7498a5222ffdda9657d84032f8feef4c9ec4d03-IERaZc_fw658'
+						},
+						{
+							txt: 'floor',
+							pic: 'https://hbimg.huabanimg.com/8e7f6ca172d22f381e66d5d6f084fcf183bbeb7b1018c-wMV1fC_fw658'
+						},
+						{
+							txt: 'floor',
+							pic: 'https://hbimg.huabanimg.com/9ab3feb7aab8a4ad849df1a8fb6c731e1b74317622bdb-BiGvbn_fw658'
+						},
+						{
+							txt: '商品列表',
+							pic: 'https://hbimg.huabanimg.com/f38be0ea920eb8d1436c0f5b44c574d84d14cb704cae4-uMFE5t_fw658'
+						},
+						{
+							txt: '商品列表1',
+							pic: 'https://hbimg.huabanimg.com/f38be0ea920eb8d1436c0f5b44c574d84d14cb704cae4-uMFE5t_fw658',
+							goods: [{
+									id: '1',
+									title: '商品1',
+									pirce: '$66',
+									pic: 'https://hbimg.huabanimg.com/74b6dd03b7c797a6ed805cd471626becea1234c44cd06-CoxwvD_fw658'
+								},
+								{
+									id: '2',
+									title: '商品2',
+									pirce: '$166',
+									pic: 'https://hbimg.huabanimg.com/74b6dd03b7c797a6ed805cd471626becea1234c44cd06-CoxwvD_fw658'
+								},
+								{
+									id: '3',
+									title: '商品3',
+									pirce: '$36',
+									pic: 'https://hbimg.huabanimg.com/74b6dd03b7c797a6ed805cd471626becea1234c44cd06-CoxwvD_fw658'
+								},
+								{
+									id: '4',
+									title: '商品4',
+									pirce: '$46',
+									pic: 'https://hbimg.huabanimg.com/74b6dd03b7c797a6ed805cd471626becea1234c44cd06-CoxwvD_fw658'
+								},
+							]
+						}
+					],
+					items: [{
+							txt: '默认banner',
+							pic:'https://hbimg.huabanimg.com/878789f8092b098109b1902c91d18c2f61eff0da2f29c-WGINq4_fw658'
+						},
+						{
+							txt: '搜索栏',
+							hotkeywordlist:[
+								{keyword:'蔡徐坤'},
+								{keyword:'没有一个能打的'},
+								{keyword:'啊屁股'},
+								{keyword:'junemetioney'},
+								{keyword:'冲冲冲'},
+								{keyword:'不雅照'},
+								{keyword:'打篮球'},
+								{keyword:'哪吒'},
+							]
+						},
+						{
+							txt: '视频栏',
+							video:'http://ming-yi.oss-us-west-1.aliyuncs.com/video/20190606/05.mp4'
+						},
+						{
+							txt: '默认内容1'
+						},
+						{
+							txt: '默认内容2'
+						},
+						{
+							txt: '默认内容3'
+						}
+					],
+					moveDom: '',
+					changeDom: '',
+					startY: 0,
+					endY: 0,
+					type: 0,
+					floorSele: -1,
+					rightBox: {},
+					rightBoxIndex: '',
+					seleddy1: -1,
+					dianjiinex: -1,
+				},
+				mounted() {},
+				methods: {
+
+					// 鼠标按下拖拽
+					drag: function(index, txt, type) {
+						console.log('操作模式:', type)
+						// 把鼠标点击得到的txt 赋值给 txt（模块数据内容）
+						this.txt = txt
+						// 判断操作是增加模块,还是上下调整(1是上下调整，0是增加拖拽)
+						if (type == 1) {
+							// 把鼠标点击得到的index 赋值给 dianjiinex（当前点击模块index）
+							this.dianjiinex = index
+						} else {
+							this.dianjiinex = -1
+						}
+						// 给操作赋值(1是上下调整，0是增加拖拽)
+						this.type = type
+					},
+
+					//放置区域监听(拖拽到有该事件的模块上触发)
+					allowDrop: function(event, index) {
+						// 判断点击的模块和经过模块是不是一样的
+						if (this.dianjiinex != index) {
+							// 给经过模块的index赋值到floorSele(这样就可以显示虚线区域)
+							this.floorSele = index
+						}
+						//运行事件(神秘代码)
+						event.preventDefault()
+					},
+
+					//松开鼠标(模块落到制定范围)
+					drop: function(index) {
+						// 判断当时是否在编辑(有则停止)
+						if (this.rightBox.txt) {
+							alert("大哥，请先保存编辑")
+							return
+						}
+						// 把鼠标点击得到的index 赋值给dianjiinex
+						var dianjiinex = this.dianjiinex
+						// 把鼠标点击得到的txt（模块数据内容） 赋值给 txt
+						var txt = this.txt
+
+						// 判断操作是增加模块,还是上下调整(1是上下调整，0是增加拖拽)
+						if (this.type == 1) {
+
+							// 判断点击的模块和放置模块是不是一样的
+							if (dianjiinex != index) {
+								//删除点击模块
+								this.items.splice(dianjiinex, 1);
+								// 判断点击的模块和放置模块的上下关系
+								if (index > dianjiinex) {
+									//把点击模块加到放置模块位置
+									this.items.splice(index, 0, txt);
+								} else {
+									//把点击模块加到放置模块下一层位置
+									this.items.splice(index * 1 + 1, 0, txt);
+								}
+
+							}
+							// 把操作判断还原
+							this.type = 0
+						} else {
+							//把点击模块加到放置模块下一层位置
+							this.items.splice(index * 1 + 1, 0, txt);
+						}
+						// 清除当前放置模块floorSele
+						this.floorSele = -1
+						// 清除当前选中模块index
+						this.dianjiinex = -1
+
+					},
+
+					//删除模块
+					delFloor: function(index) {
+						// 判断当时是否在编辑
+						if (this.rightBox.txt) {
+							alert("大哥，请先保存当前编辑模块")
+						} else {
+
+							// 判断模块是不是最后一个了
+							if (this.items.length < 2) {
+								alert("大哥，留一个吧")
+							} else {
+								// 删除index模块
+								this.items.splice(index, 1);
+							}
+						}
+
+
+					},
+
+					// 点击模块编辑
+					rightBoxBtn: function(index) {
+						// 判断当时是否在编辑
+						if (this.rightBox.txt) {
+							alert("大哥，请先保存当前编辑模块")
+						} else {
+							//保存模块index
+							this.rightBoxIndex = index
+							//模块数据赋值
+							var seleitem = this.items[index]
+							//模块数据赋值给 rightBox(当前编辑区域内容)
+							this.rightBox = JSON.parse(JSON.stringify(seleitem));
+						}
+
+					},
+
+					// 保存模块编辑内容
+					saveRightBox: function(index) {
+						//点击模块index 赋值
+						var rightBoxIndex = this.rightBoxIndex
+						//奖rightBox(当前编辑区域内容) 赋值给 items(主数据表单)
+						this.items[rightBoxIndex] = JSON.parse(JSON.stringify(this.rightBox));
+						// 清空 rightBox(当前编辑区域内容)
+						this.rightBox = {}
+						// 清空模块index
+						this.rightBoxIndex = ''
+					},
+
+					// 取消模块编辑内容
+					clearRightBox: function(index) {
+						// 清空 rightBox(当前编辑区域内容)
+						this.rightBox = {}
+						// 清空模块index
+						this.rightBoxIndex = ''
+					},
+
+					// 选择编辑商品
+					seleddy1Btn: function(index) {
+						this.seleddy1 = index
+					}
+
+				}
+			})
+		</script>
+	</body>
+</html>
